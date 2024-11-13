@@ -66,19 +66,32 @@ fun AuthenticationScreen(
     val uiState = viewModel.uiState.collectAsState().value
 
     // Passing in the lambda / context to the VM
-    val activityContext = LocalContext.current
+    val context = LocalContext.current
     val onSignInWithPasskeysRequest = {
         viewModel.signInWithPasskeysRequest(
             onSuccess = { flag ->
                 navigateToHome(flag)
             },
-        ) { jsonObject ->
-            credentialManagerUtils.getPasskey(
-                activity = activityContext,
-                creationResult = jsonObject,
-            )
-        }
+            getPasskey = { jsonObject ->
+                credentialManagerUtils.getPasskey(
+                    context = context,
+                    creationResult = jsonObject,
+                )
+            },
+            createRestoreCredential = { createRestoreCredObject ->
+                credentialManagerUtils.createRestoreKey(
+                    context = context,
+                    requestResult = createRestoreCredObject,
+                )
+            },
+        )
     }
+
+    viewModel.checkForStoredRestoreKey(
+        getRestoreKey = { requestResult ->
+            credentialManagerUtils.getRestoreKey(requestResult, context)
+        },
+    )
 
     AuthenticationScreen(
         onSignInWithPasskeysRequest = onSignInWithPasskeysRequest,

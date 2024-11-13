@@ -90,13 +90,20 @@ fun RegisterScreen(
             onSuccess = { flag ->
                 navigateToHome(flag)
             },
-        ) { username: String, password: String ->
-            credentialManagerUtils.createPassword(
-                username = username,
-                password = password,
-                activity = activityContext,
-            )
-        }
+            createPassword = { username: String, password: String ->
+                credentialManagerUtils.createPassword(
+                    username = username,
+                    password = password,
+                    activity = activityContext,
+                )
+            },
+            createRestoreCredential = { createRestoreCredObject ->
+                credentialManagerUtils.createRestoreKey(
+                    createRestoreCredObject,
+                    activityContext,
+                )
+            },
+        )
     }
 
     RegisterScreen(

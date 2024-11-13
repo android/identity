@@ -34,9 +34,9 @@ import javax.inject.Inject
  * The main activity and the entry point of the Shrine app.
  */
 @AndroidEntryPoint
-class MainActivity @Inject constructor(
-    private val credentialManagerUtils: CredentialManagerUtils,
-) : ComponentActivity() {
+class MainActivity : ComponentActivity() {
+
+    @Inject lateinit var credentialManagerUtils: CredentialManagerUtils
 
     private val splashViewModel: SplashViewModel by viewModels()
 
